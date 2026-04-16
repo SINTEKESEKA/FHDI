@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full HD.ink — Creative Consulting Agency</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --bg2: #111111;
+    --surface: #141414;
+    --electric: #00BFFF;
+    --electric2: #0080FF;
+    --electric-glow: rgba(0,191,255,0.15);
+    --text: #f0f0f0;
+    --text-muted: #888;
+    --border: rgba(0,191,255,0.2);
+    --paper-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    --cursor-color: var(--electric);
+  }
+  [data-theme="light"] {
+    --bg: #f5f0eb;
+    --bg2: #ede8e2;
+    --surface: #ffffff;
+    --electric: #0055CC;
+    --electric2: #003399;
+    --electric-glow: rgba(0,85,204,0.1);
+    --text: #111111;
+    --text-muted: #555;
+    --border: rgba(0,85,204,0.2);
+    --paper-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.06'/%3E%3C/svg%3E");
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Courier Prime', monospace;
+    background: var(--bg);
+    color: var(--text);
+    cursor: none;
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
+  }
+
+  /* PAPER TEXTURE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: var(--paper-dark);
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 1;
+  }
+
+  /* CUSTOM CURSOR */
+  .cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    background: var(--electric);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px; height: 40px;
+    border: 1.5px solid var(--electric);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.5;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 2.5rem;
+    backdrop-filter: blur(12px);
+    background: rgba(10,10,10,0.7);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s;
+  }
+  [data-theme="light"] nav { background: rgba(245,240,235,0.8); }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+  }
+  .logo img {
+    height: 44px;
+    width: 44px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    filter: drop-shadow(0 0 8px var(--electric));
+  }
+  .logo-text {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.1rem;
+    color: var(--text);
+    letter-spacing: 0.05em;
+    line-height: 1.2;
+  }
+  .logo-text span { color: var(--electric); }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .theme-toggle {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text);
+    cursor: none;
+    padding: 0.4rem 0.8rem;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    transition: all 0.3s;
+    border-radius: 2px;
+  }
+  .theme-toggle:hover { background: var(--electric-glow); border-color: var(--electric); color: var(--electric); }
+
+  /* HAMBURGER */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: none;
+    padding: 6px;
+    z-index: 1001;
+    background: none;
+    border: none;
+  }
+  .hamburger span {
+    display: block;
+    width: 28px; height: 2px;
+    background: var(--electric);
+    transition: all 0.35s cubic-bezier(0.77,0,0.18,1);
+    transform-origin: center;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MENU OVERLAY */
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    padding: 7rem 3rem 3rem;
+    transform: translateX(100%);
+    transition: transform 0.6s cubic-bezier(0.77,0,0.18,1);
+    overflow-y: auto;
+  }
+  .menu-overlay.open { transform: translateX(0); }
+
+  .menu-overlay::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, transparent, var(--electric), transparent);
+  }
+
+  .menu-label {
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--electric);
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+  }
+
+  .menu-categories {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 700px) { .menu-categories { grid-template-columns: 1fr; } }
+
+  .menu-category {
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .menu-category::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--electric-glow);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .menu-category:hover::before { opacity: 1; }
+  .menu-category:hover { border-color: var(--electric); transform: translateY(-2px); }
+
+  .menu-cat-icon { font-size: 1.6rem; margin-bottom: 0.5rem; }
+  .menu-cat-title {
+    font-family: 'Special Elite', cursive;
+    font-size: 1rem;
+    color: var(--electric);
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.05em;
+  }
+  .menu-cat-desc {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .menu-contacts {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 0.72rem;
+  }
+  .menu-contacts a {
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+  .menu-contacts a:hover { color: var(--electric); }
+
+  /* HERO SECTION */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(0,191,255,0.07) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  [data-theme="light"] .hero-bg {
+    background: radial-gradient(ellipse 80% 60% at 50% 60%, rgba(0,85,204,0.06) 0%, transparent 70%);
+  }
+
+  /* GRID LINES */
+  .hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.3) 0%, transparent 70%);
+    pointer-events: none;
+    animation: gridMove 20s linear infinite;
+  }
+  @keyframes gridMove {
+    0% { background-position: 0 0; }
+    100% { background-position: 60px 60px; }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-title {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .hero-title .accent { color: var(--electric); display: block; }
+  .hero-title .outline {
+    -webkit-text-stroke: 1.5px var(--text);
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    color: var(--text-muted);
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 3rem;
+    animation: fadeUp 1s 0.2s ease both;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeUp 1s 0.3s ease both;
+  }
+
+  .btn-primary {
+    padding: 0.9rem 2.5rem;
+    background: var(--electric);
+    color: #000;
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: none;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+  }
+  .btn-primary:hover::before { transform: translateX(0); }
+  .btn-primary:hover { box-shadow: 0 0 30px var(--electric), 0 0 60px rgba(0,191,255,0.3); transform: translateY(-2px); }
+
+  .btn-outline {
+    padding: 0.9rem 2.5rem;
+    background: transparent;
+    color: var(--text);
+    font-family: 'Courier Prime', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    cursor: none;
+    transition: all 0.3s;
+  }
+  .btn-outline:hover { border-color: var(--electric); color: var(--electric); background: var(--electric-glow); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    animation: fadeUp 1s 0.5s ease both;
+  }
+  .scroll-hint .arrow {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--electric), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%,100% { opacity: 0.3; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.1); }
+  }
+
+  /* STACKING SECTIONS */
+  .stack-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 6rem 2rem;
+    overflow: hidden;
+  }
+
+  .stack-section:nth-child(odd) { background: var(--bg); }
+  .stack-section:nth-child(even) { background: var(--bg2); }
+
+  .section-inner {
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+  }
+  .section-inner.reverse { direction: rtl; }
+  .section-inner.reverse > * { direction: ltr; }
+
+  @media (max-width: 800px) {
+    .section-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .section-inner.reverse { direction: ltr; }
+  }
+
+  .section-text .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .section-text h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    line-height: 1.1;
+    margin-bottom: 1.2rem;
+  }
+  .section-text h2 em { color: var(--electric); font-style: normal; }
+  .section-text p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+  }
+  .section-text ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+  .section-text ul li {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .section-text ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--electric);
+  }
+
+  /* SERVICE IMAGE BOX */
+  .section-visual {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .section-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--electric-glow) 0%, transparent 60%);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .section-visual::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(to top, var(--bg), transparent);
+    z-index: 1;
+    pointer-events: none;
+  }
+  .section-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.7) brightness(0.8);
+    transition: transform 0.8s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.5s;
+  }
+  .section-visual:hover img { transform: scale(1.05); filter: saturate(1) brightness(0.9); }
+  .visual-corner {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 30px; height: 30px;
+    border-top: 2px solid var(--electric);
+    border-right: 2px solid var(--electric);
+    z-index: 2;
+  }
+  .visual-corner-bl {
+    position: absolute;
+    bottom: 12px; left: 12px;
+    width: 30px; height: 30px;
+    border-bottom: 2px solid var(--electric);
+    border-left: 2px solid var(--electric);
+    z-index: 2;
+  }
+
+  /* PLACEHOLDER IMAGE FALLBACK */
+  .img-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    background: var(--surface);
+  }
+
+  /* STATS / MARQUEE */
+  .marquee-section {
+    overflow: hidden;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 0;
+    background: var(--surface);
+  }
+  .marquee-track {
+    display: flex;
+    gap: 4rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-track span {
+    font-family: 'Special Elite', cursive;
+    font-size: 1rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .marquee-track span em { color: var(--electric); font-style: normal; margin-right: 4rem; }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* SERVICES GRID */
+  .services-section {
+    padding: 7rem 2rem;
+    background: var(--bg);
+  }
+  .services-section .section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+  .section-header .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 1rem;
+    display: block;
+  }
+  .section-header h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+  }
+  .section-header h2 em { color: var(--electric); font-style: normal; }
+
+  .services-grid {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5px;
+    border: 1.5px solid var(--border);
+  }
+  .service-card {
+    padding: 2.5rem 2rem;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s;
+    cursor: none;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--electric);
+    transition: width 0.4s;
+  }
+  .service-card:hover::before { width: 100%; }
+  .service-card:hover { background: var(--bg2); transform: translateY(-4px); }
+  .service-card .num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s;
+  }
+  .service-card:hover .num { color: var(--electric); opacity: 0.4; }
+  .service-card h3 {
+    font-family: 'Special Elite', cursive;
+    font-size: 1.15rem;
+    margin-bottom: 0.8rem;
+    color: var(--text);
+  }
+  .service-card p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+  .service-icon { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+
+  /* PARALLAX MOUSE */
+  .parallax-layer { transition: transform 0.1s linear; }
+
+  /* ABOUT STRIP */
+  .about-strip {
+    padding: 8rem 2rem;
+    background: var(--bg2);
+    position: relative;
+    overflow: hidden;
+  }
+  .about-strip::before {
+    content: 'FHDI';
+    position: absolute;
+    right: -2rem; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20rem;
+    color: var(--border);
+    opacity: 0.15;
+    pointer-events: none;
+    line-height: 1;
+  }
+  .about-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .about-inner .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--electric);
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .about-inner h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1.5rem;
+  }
+  .about-inner p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+    margin-bottom: 1rem;
+  }
+
+  /* CONTACT SECTION */
+  .contact-section {
+    padding: 7rem 2rem;
+    background: var(--bg);
+    text-align: center;
+  }
+  .contact-section .tag {
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--electric);
+    display: block;
+    margin-bottom: 1rem;
+  }
+  .contact-section h2 {
+    font-family: 'Special Elite', cursive;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 1rem;
+  }
+  .contact-section p {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 3rem;
+  }
+  .contact-grid {
+    max-width: 700px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  .contact-card {
+    padding: 1.5rem 1rem;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s;
+    background: var(--surface);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  .contact-card:hover { border-color: var(--electric); background: var(--electric-glow); color: var(--electric); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,191,255,0.1); }
+  .contact-card .cicon { font-size: 1.5rem; }
+
+  /* FOOTER */
+  footer {
+    padding: 2.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: var(--bg2);
+  }
+  footer a { color: var(--electric); text-decoration: none; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* GLOW LINE */
+  .glow-line {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--electric), transparent);
+    margin: 0;
+    opacity: 0.5;
+  }
+
+  /* TYPED CURSOR */
+  .typed-cursor {
+    display: inline-block;
+    width: 3px;
+    background: var(--electric);
+    animation: blink 1s step-end infinite;
+    vertical-align: text-bottom;
+    margin-left: 2px;
+    height: 0.9em;
+  }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+  /* MOBILE NAV */
+  @media (max-width: 500px) {
+    nav { padding: 1rem 1.2rem; }
+    .hero-title { font-size: 3rem; }
+    .menu-categories { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <img src="FHDI_LOG.jpg" alt="Full HD.ink Logo" onerror="this.style.display='none'">
+    <div class="logo-text">Full <span>HD</span>.ink</div>
+  </a>
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle">◐ MODE</button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- MENU OVERLAY -->
+<div class="menu-overlay" id="menuOverlay">
+  <div class="menu-label">// Our Consulting Categories</div>
+  <div class="menu-categories">
+    <div class="menu-category">
+      <div class="menu-cat-icon">🎬</div>
+      <div class="menu-cat-title">Visuals & Photography</div>
+      <div class="menu-cat-desc">From brand photography to cinematic video production, we craft visual narratives that speak louder than words. Our visual consultants guide you through concept development, equipment selection, color grading, post-production workflows, and distribution strategies.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">🎵</div>
+      <div class="menu-cat-title">Audio Engineering</div>
+      <div class="menu-cat-desc">Studio-quality sound for podcasts, jingles, voice-overs, event audio, and broadcast. We consult on acoustic environments, recording setups, mixing, mastering, and audio branding — ensuring your brand sounds as sharp as it looks.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">💡</div>
+      <div class="menu-cat-title">Lighting Design</div>
+      <div class="menu-cat-desc">Lighting is storytelling. We advise on studio setups, event lighting rigs, architectural lighting for commercial spaces, and cinematic lighting for productions. From softboxes to LED panels and intelligent fixtures, we illuminate your vision.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">💻</div>
+      <div class="menu-cat-title">Software & Coding</div>
+      <div class="menu-cat-desc">Custom software solutions tailored to your business logic. We consult on system architecture, full-stack development, API integrations, mobile apps, automation scripts, and tech stack selection — turning your ideas into scalable, maintainable code.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">📊</div>
+      <div class="menu-cat-title">Data Analysis</div>
+      <div class="menu-cat-desc">Transform raw data into business intelligence. We guide organizations through data collection pipelines, visualization dashboards, statistical modelling, machine learning implementations, and data governance strategies to make evidence-based decisions.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">🌐</div>
+      <div class="menu-cat-title">Web Development</div>
+      <div class="menu-cat-desc">From sleek landing pages to complex web applications, we consult on UX/UI design, frontend frameworks, backend architecture, CMS selection, SEO optimization, performance tuning, and progressive web app development that converts visitors to clients.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">🔒</div>
+      <div class="menu-cat-title">Cyber Security</div>
+      <div class="menu-cat-desc">Protect your digital assets with expert security advisory. We provide vulnerability assessments, penetration testing guidance, network security audits, security awareness training, compliance consulting (GDPR, ISO 27001), and incident response planning.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">📣</div>
+      <div class="menu-cat-title">Digital Marketing</div>
+      <div class="menu-cat-desc">Growth-focused digital strategy across all channels. We consult on social media strategy, SEO & SEM campaigns, content marketing, influencer partnerships, email marketing automation, analytics tracking, and brand positioning for maximum reach.</div>
+    </div>
+    <div class="menu-category">
+      <div class="menu-cat-icon">🎨</div>
+      <div class="menu-cat-title">Graphic Design</div>
+      <div class="menu-cat-desc">Visual identity that commands attention. We provide consulting on brand identity systems, logo development, print and digital collateral, UI design, packaging, motion graphics, and design systems that ensure consistent, memorable brand presence.</div>
+    </div>
+  </div>
+  <div class="menu-contacts">
+    <a href="https://facebook.com/fullhdink" target="_blank">📘 Facebook</a>
+    <a href="https://instagram.com/FHDI_MW" target="_blank">📸 Instagram</a>
+    <a href="https://wa.me/message/WTVACDFPNA6BB1" target="_blank">💬 WhatsApp</a>
+    <a href="mailto:fullhdink@yahoo.com">✉️ fullhdink@yahoo.com</a>
+    <a href="tel:+265880600852">📞 +265 880 600 852</a>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-eyebrow">Malawi's Premier Creative Consulting Agency</div>
+  <h1 class="hero-title parallax-layer" data-speed="0.03">
+    <span class="outline">We Make</span>
+    <span class="accent">Ideas</span>
+    Unforgettable<span class="typed-cursor"></span>
+  </h1>
+  <p class="hero-sub parallax-layer" data-speed="0.02">
+    Full HD.ink delivers media-centric consulting — from visuals and audio to code and cybersecurity — built for businesses that refuse to blend in.
+  </p>
+  <div class="hero-cta">
+    <a href="#services" class="btn-primary">Explore Services</a>
+    <a href="#contact" class="btn-outline">Get In Touch</a>
+  </div>
+  <div class="scroll-hint">
+    <div class="arrow"></div>
+    Scroll
+  </div>
+</section>
+
+<div class="glow-line"></div>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span>Visuals <em>✦</em></span>
+    <span>Audio <em>✦</em></span>
+    <span>Lighting <em>✦</em></span>
+    <span>Coding <em>✦</em></span>
+    <span>Data Analysis <em>✦</em></span>
+    <span>Web Dev <em>✦</em></span>
+    <span>Cyber Security <em>✦</em></span>
+    <span>Digital Marketing <em>✦</em></span>
+    <span>Graphic Design <em>✦</em></span>
+    <span>Visuals <em>✦</em></span>
+    <span>Audio <em>✦</em></span>
+    <span>Lighting <em>✦</em></span>
+    <span>Coding <em>✦</em></span>
+    <span>Data Analysis <em>✦</em></span>
+    <span>Web Dev <em>✦</em></span>
+    <span>Cyber Security <em>✦</em></span>
+    <span>Digital Marketing <em>✦</em></span>
+    <span>Graphic Design <em>✦</em></span>
+  </div>
+</div>
+
+<!-- STACK: VISUALS -->
+<section class="stack-section reveal">
+  <div class="section-inner">
+    <div class="section-text">
+      <span class="tag">// 01 — Visuals & Photography</span>
+      <h2>Your Story,<br><em>Pixel Perfect</em></h2>
+      <p>In a world drowning in mediocre content, we help you produce visuals that command attention. Our visual consulting covers everything from storyboarding and production planning to post-production workflows and final delivery optimization.</p>
+      <ul>
+        <li>Brand photography & cinematography direction</li>
+        <li>Color grading & post-production pipelines</li>
+        <li>Equipment selection & studio setup</li>
+        <li>Visual content strategy & distribution</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=800&q=80" alt="Photography studio" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: AUDIO -->
+<section class="stack-section reveal">
+  <div class="section-inner reverse">
+    <div class="section-text">
+      <span class="tag">// 02 — Audio Engineering</span>
+      <h2>Sound That<br><em>Resonates</em></h2>
+      <p>Audio is the invisible architecture of your brand. Whether you're podcasting, scoring a film, or designing your brand's sonic identity, our audio consultants ensure every frequency works in your favor.</p>
+      <ul>
+        <li>Podcast production & voice-over direction</li>
+        <li>Studio acoustics & recording setup</li>
+        <li>Mixing, mastering & sound design</li>
+        <li>Audio branding & jingle development</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=800&q=80" alt="Audio studio mixing" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: LIGHTING -->
+<section class="stack-section reveal">
+  <div class="section-inner">
+    <div class="section-text">
+      <span class="tag">// 03 — Lighting Design</span>
+      <h2>Light Is<br><em>Everything</em></h2>
+      <p>From event stages to commercial studios and architectural spaces, lighting transforms ordinary environments into extraordinary experiences. We consult on lighting rigs, intelligent fixtures, and creative lighting narratives that align with your brand vision.</p>
+      <ul>
+        <li>Studio & cinematic lighting setups</li>
+        <li>Event & stage lighting design</li>
+        <li>Architectural & commercial lighting</li>
+        <li>LED & intelligent fixture consultation</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=800&q=80" alt="Stage lighting" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: CODING -->
+<section class="stack-section reveal">
+  <div class="section-inner reverse">
+    <div class="section-text">
+      <span class="tag">// 04 — Software & Coding</span>
+      <h2>Code That<br><em>Scales</em></h2>
+      <p>Software is the backbone of modern business. Our engineering consultants help you architect systems that grow with you, choose the right tech stacks, and build products that users actually love to use — from MVP to enterprise-scale.</p>
+      <ul>
+        <li>System architecture & tech stack selection</li>
+        <li>Full-stack web & mobile app development</li>
+        <li>API design, integration & automation</li>
+        <li>Code reviews & performance optimization</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&q=80" alt="Code on screen" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: DATA -->
+<section class="stack-section reveal">
+  <div class="section-inner">
+    <div class="section-text">
+      <span class="tag">// 05 — Data Analysis</span>
+      <h2>Data Tells<br><em>The Truth</em></h2>
+      <p>Behind every successful strategy is a layer of clean, well-interpreted data. We guide businesses through data collection, visualization, predictive modelling, and building the analytical culture needed to compete in a data-driven world.</p>
+      <ul>
+        <li>Data pipelines & ETL architecture</li>
+        <li>Dashboard design & BI tools</li>
+        <li>Statistical modelling & ML consulting</li>
+        <li>Data governance & privacy compliance</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80" alt="Data visualization" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: WEB DEV -->
+<section class="stack-section reveal">
+  <div class="section-inner reverse">
+    <div class="section-text">
+      <span class="tag">// 06 — Web Development</span>
+      <h2>Websites That<br><em>Convert</em></h2>
+      <p>Your website is your most powerful sales tool. We consult on UX strategy, frontend performance, SEO, CMS platforms, and web application architecture so your digital presence works around the clock for your business.</p>
+      <ul>
+        <li>UX/UI design & prototyping</li>
+        <li>Frontend, backend & full-stack consulting</li>
+        <li>SEO strategy & performance optimization</li>
+        <li>E-commerce & progressive web apps</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80" alt="Web development" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: CYBERSEC -->
+<section class="stack-section reveal">
+  <div class="section-inner">
+    <div class="section-text">
+      <span class="tag">// 07 — Cyber Security</span>
+      <h2>Defend What<br><em>Matters</em></h2>
+      <p>Cyber threats don't take breaks. We provide strategic security consulting to identify vulnerabilities, strengthen defenses, and build a security-first culture within your organization — before attackers find the gaps.</p>
+      <ul>
+        <li>Vulnerability assessments & pen testing guidance</li>
+        <li>Network security architecture</li>
+        <li>Security awareness training</li>
+        <li>Compliance advisory (GDPR, ISO 27001)</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&q=80" alt="Cybersecurity" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: DIGITAL MARKETING -->
+<section class="stack-section reveal">
+  <div class="section-inner reverse">
+    <div class="section-text">
+      <span class="tag">// 08 — Digital Marketing</span>
+      <h2>Grow Louder,<br><em>Grow Smarter</em></h2>
+      <p>Visibility without strategy is just noise. We build digital marketing blueprints that align content, paid media, SEO, and social engagement into cohesive growth engines for brands ready to dominate their markets.</p>
+      <ul>
+        <li>Social media strategy & content planning</li>
+        <li>SEO, SEM & paid advertising consulting</li>
+        <li>Email marketing & automation</li>
+        <li>Brand positioning & influencer strategy</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1432888622747-4eb9a8f5a07f?w=800&q=80" alt="Digital marketing" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- STACK: GRAPHIC DESIGN -->
+<section class="stack-section reveal">
+  <div class="section-inner">
+    <div class="section-text">
+      <span class="tag">// 09 — Graphic Design</span>
+      <h2>Design That<br><em>Commands</em></h2>
+      <p>Great design is the silent salesperson that never clocks out. We consult on brand identity systems, design language, print and digital collateral, motion graphics, and design systems that make your brand impossible to ignore.</p>
+      <ul>
+        <li>Brand identity & logo system development</li>
+        <li>Print, packaging & digital collateral</li>
+        <li>Motion graphics & UI design</li>
+        <li>Design system & style guide creation</li>
+      </ul>
+    </div>
+    <div class="section-visual reveal">
+      <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=800&q=80" alt="Graphic design" loading="lazy">
+      <div class="visual-corner"></div>
+      <div class="visual-corner-bl"></div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-line"></div>
+
+<!-- ALL SERVICES GRID -->
+<section class="services-section" id="services">
+  <div class="section-header">
+    <span class="tag">// What We Offer</span>
+    <h2>All <em>Services</em></h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-icon">🎬</span>
+      <div class="num">01</div>
+      <h3>Visuals & Photography</h3>
+      <p>Cinematic content that captures your brand's essence with precision and artistry.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🎵</span>
+      <div class="num">02</div>
+      <h3>Audio Engineering</h3>
+      <p>Studio-quality sound consulting for podcasts, events, and brand audio identity.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">💡</span>
+      <div class="num">03</div>
+      <h3>Lighting Design</h3>
+      <p>Illuminate your productions and spaces with expert lighting architecture.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">💻</span>
+      <div class="num">04</div>
+      <h3>Software & Coding</h3>
+      <p>Scalable software architecture and development consulting for growing businesses.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">📊</span>
+      <div class="num">05</div>
+      <h3>Data Analysis</h3>
+      <p>Turn raw data into strategic insights with advanced analytics consulting.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🌐</span>
+      <div class="num">06</div>
+      <h3>Web Development</h3>
+      <p>High-performance websites and web applications built to convert and scale.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🔒</span>
+      <div class="num">07</div>
+      <h3>Cyber Security</h3>
+      <p>Protect your digital infrastructure with proactive security strategy and audits.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">📣</span>
+      <div class="num">08</div>
+      <h3>Digital Marketing</h3>
+      <p>Data-driven campaigns that grow your audience and convert them into loyal clients.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🎨</span>
+      <div class="num">09</div>
+      <h3>Graphic Design</h3>
+      <p>Striking visual identities and design systems that make your brand unforgettable.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-strip reveal">
+  <div class="about-inner">
+    <span class="tag">// About Full HD.ink</span>
+    <h2>Media-Centric. <em>Results-Driven.</em></h2>
+    <p>Full HD.ink is a Malawi-based creative consulting agency built at the intersection of technology, media, and strategy. We don't just advise — we embed ourselves in your challenges and emerge with solutions that move the needle.</p>
+    <p>Our team of specialists across visuals, audio, code, data, and digital marketing brings a unified, high-definition perspective to every brief. Whether you're a startup building your first brand identity or an enterprise optimizing your digital infrastructure, we bring the clarity and precision your vision deserves.</p>
+    <p>Full HD. No compromise.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section reveal" id="contact">
+  <span class="tag">// Get In Touch</span>
+  <h2>Let's Build<br><em>Something Great</em></h2>
+  <p>Ready to elevate your brand? Reach out through any channel.</p>
+  <div class="contact-grid">
+    <a href="https://facebook.com/fullhdink" target="_blank" class="contact-card">
+      <span class="cicon">📘</span>
+      <span>Facebook</span>
+      <span style="color:var(--text-muted);font-size:0.65rem">Full HDink</span>
+    </a>
+    <a href="https://instagram.com/FHDI_MW" target="_blank" class="contact-card">
+      <span class="cicon">📸</span>
+      <span>Instagram</span>
+      <span style="color:var(--text-muted);font-size:0.65rem">@FHDI_MW</span>
+    </a>
+    <a href="https://wa.me/message/WTVACDFPNA6BB1" target="_blank" class="contact-card">
+      <span class="cicon">💬</span>
+      <span>WhatsApp</span>
+      <span style="color:var(--text-muted);font-size:0.65rem">Message Us</span>
+    </a>
+    <a href="mailto:fullhdink@yahoo.com" class="contact-card">
+      <span class="cicon">✉️</span>
+      <span>Email</span>
+      <span style="color:var(--text-muted);font-size:0.65rem">fullhdink@yahoo.com</span>
+    </a>
+    <a href="tel:+265880600852" class="contact-card">
+      <span class="cicon">📞</span>
+      <span>Phone</span>
+      <span style="color:var(--text-muted);font-size:0.65rem">+265 880 600 852</span>
+    </a>
+  </div>
+</section>
+
+<div class="glow-line"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div>© 2025 Full HD.ink — All Rights Reserved</div>
+  <div>Lilongwe, Malawi &nbsp;|&nbsp; <a href="mailto:fullhdink@yahoo.com">fullhdink@yahoo.com</a></div>
+  <div><a href="tel:+265880600852">+265 880 600 852</a></div>
+</footer>
+
+<script>
+  // CURSOR
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Cursor scale on hover
+  document.querySelectorAll('a, button, .service-card, .menu-category, .contact-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '6px';
+      cursor.style.height = '6px';
+      ring.style.width = '60px';
+      ring.style.height = '60px';
+      ring.style.opacity = '0.3';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '12px';
+      cursor.style.height = '12px';
+      ring.style.width = '40px';
+      ring.style.height = '40px';
+      ring.style.opacity = '0.5';
+    });
+  });
+
+  // PARALLAX MOUSE
+  document.addEventListener('mousemove', e => {
+    const x = (e.clientX / window.innerWidth - 0.5);
+    const y = (e.clientY / window.innerHeight - 0.5);
+    document.querySelectorAll('.parallax-layer').forEach(el => {
+      const s = parseFloat(el.dataset.speed) || 0.02;
+      el.style.transform = `translate(${x * s * 100}px, ${y * s * 100}px)`;
+    });
+  });
+
+  // HAMBURGER
+  const hamburger = document.getElementById('hamburger');
+  const menuOverlay = document.getElementById('menuOverlay');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    menuOverlay.classList.toggle('open');
+    document.body.style.overflow = menuOverlay.classList.contains('open') ? 'hidden' : '';
+  });
+
+  // Close menu on link click
+  menuOverlay.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      menuOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // THEME TOGGLE
+  const themeToggle = document.getElementById('themeToggle');
+  const html = document.documentElement;
+  themeToggle.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme');
+    html.setAttribute('data-theme', current === 'dark' ? 'light' : 'dark');
+    themeToggle.textContent = current === 'dark' ? '◑ MODE' : '◐ MODE';
+  });
+
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // TYPED EFFECT - hero subtitle cycling
+  const words = ['Unforgettable', 'Impactful', 'Full HD'];
+  let wi = 0, ci = 0, deleting = false;
+  const target = document.querySelector('.hero-title');
+  const outlineSpan = target ? target.querySelector('.outline') : null;
+
+  // Simple type effect on eyebrow
+  const eyebrow = document.querySelector('.hero-eyebrow');
+  const eyebrowText = eyebrow ? eyebrow.textContent : '';
+  if (eyebrow) {
+    eyebrow.textContent = '';
+    let ei = 0;
+    const typeEyebrow = () => {
+      if (ei < eyebrowText.length) {
+        eyebrow.textContent += eyebrowText[ei++];
+        setTimeout(typeEyebrow, 40);
+      }
+    };
+    setTimeout(typeEyebrow, 300);
+  }
+</script>
+</body>
+</html>
